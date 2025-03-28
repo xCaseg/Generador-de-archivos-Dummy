@@ -24,12 +24,51 @@ def genera_txt(nombre_archivo):
         f.write(contenido_aleatorio_lineas())
 
 def genera_pdf(nombre_archivo):
+    contenido = """%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792]
+   /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length {length} >>
+stream
+BT
+/F1 24 Tf
+100 700 Td
+({texto}) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f
+0000000010 00000 n
+0000000061 00000 n
+0000000110 00000 n
+0000000247 00000 n
+0000000380 00000 n
+trailer
+<< /Root 1 0 R /Size 6 >>
+startxref
+490
+%%EOF
+""".strip()
+
+    texto_random = ''.join(random.choices(string.ascii_letters + string.digits, k=20))
+    texto_pdf = contenido.format(texto=texto_random, length=65 + len(texto_random))  # longitud aproximada del stream
+
     with open(nombre_archivo, 'wb') as f:
-        contenido = "%PDF-1.4\n% Dummy PDF\n1 0 obj\n<< /Type /Catalog >>\nendobj\n"
-        contenido += "2 0 obj\n<< /Length 44 >>\nstream\n"
-        contenido += contenido_aleatorio_lineas(3, 30)
-        contenido += "\nendstream\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF"
-        f.write(contenido.encode('utf-8'))
+        f.write(texto_pdf.encode('latin1'))
+
 
 def genera_excel(nombre_archivo):
     with open(nombre_archivo, 'w') as f:
